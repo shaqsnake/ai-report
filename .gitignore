@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+
+# Config with secrets
+config.yml
+
+# IDE
+.vscode/
+.idea/
+
+# Output
+output/
+captcha.jpg
+
+# PyInstaller
+*.spec
+
+# OS
+.DS_Store
+Thumbs.db
+
+# DevChat
+.chat/
+
+# Coverage
+.coverage
+htmlcov/
+
+# Misc
+.pytest_cache/

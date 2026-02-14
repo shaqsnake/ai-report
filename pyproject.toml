@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "stock-auditor"
+version = "1.0.0"
+description = "Automated quarterly stock trading account audit tool for ChinaClear"
+requires-python = ">=3.10"
+dependencies = [
+    "selenium>=4.15",
+    "webdriver-manager>=4.0",
+    "ddddocr>=1.4",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4",
+    "pytest-cov>=4.1",
+]
+
+[project.scripts]
+stock-auditor = "stock_auditor.main:cli"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+
+[tool.coverage.run]
+source = ["src/stock_auditor"]
+
+[tool.coverage.report]
+fail_under = 80

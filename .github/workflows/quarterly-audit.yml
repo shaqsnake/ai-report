@@ -1,0 +1,58 @@
+name: Quarterly Audit
+
+on:
+  schedule:
+    # Every quarter: 1st day of Jan, Apr, Jul, Oct at 09:00 UTC (17:00 Beijing)
+    - cron: '0 9 1 1,4,7,10 *'
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Set up Chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
+
+      - name: Install Chinese fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-wqy-zenhei fonts-wqy-microhei
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Copy config
+        run: cp config.example.yml config.yml
+
+      - name: Run audit
+        env:
+          HEADLESS: "true"
+          STOCK_USER_0_USERNAME: ${{ secrets.STOCK_USER_0_USERNAME }}
+          STOCK_USER_0_PASSWORD: ${{ secrets.STOCK_USER_0_PASSWORD }}
+          STOCK_USER_1_USERNAME: ${{ secrets.STOCK_USER_1_USERNAME }}
+          STOCK_USER_1_PASSWORD: ${{ secrets.STOCK_USER_1_PASSWORD }}
+          SMTP_SENDER: ${{ secrets.SMTP_SENDER }}
+          SMTP_AUTH_CODE: ${{ secrets.SMTP_AUTH_CODE }}
+        run: |
+          PYTHONPATH=src python -m stock_auditor --config config.yml
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: audit-screenshots
+          path: output/
+          retention-days: 90

@@ -1,0 +1,26 @@
+chinaclear:
+  login_url: "https://passport.chinaclear.cn/login"
+  captcha_retries: 3
+
+browser:
+  headless: false          # CI 中通过环境变量 HEADLESS=true 覆盖
+  query_wait: 2
+
+output:
+  base_dir: "./output"
+
+users:
+  - name: "佳佳"
+    # 凭据来自环境变量: STOCK_USER_0_USERNAME, STOCK_USER_0_PASSWORD
+  - name: "夏秋"
+    # 凭据来自环境变量: STOCK_USER_1_USERNAME, STOCK_USER_1_PASSWORD
+
+email:
+  enabled: true
+  smtp_host: "smtp.qq.com"
+  smtp_port: 465
+  use_ssl: true
+  # 发件人和授权码来自环境变量: SMTP_SENDER, SMTP_AUTH_CODE
+  recipients:
+    - "recipient@example.com"
+  subject_template: "股票对账报告 - {quarter} - {user}"
